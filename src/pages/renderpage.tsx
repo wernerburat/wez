@@ -1,13 +1,13 @@
 import React from "react";
+import type { Scene } from "@babylonjs/core";
+import SceneComponent from "~/components/babylon/SceneComponent";
 import {
   FreeCamera,
   Vector3,
   HemisphericLight,
   MeshBuilder,
-  Scene,
+  Mesh,
 } from "@babylonjs/core";
-import SceneComponent from "~/components/babylon/SceneComponent";
-import { Mesh } from "@babylonjs/core/Meshes";
 
 let box: Mesh;
 
@@ -51,16 +51,20 @@ const onRender = (scene: Scene) => {
   }
 };
 
-export default () => (
-  <div className="flex-grow">
-    <SceneComponent
-      antialias
-      onSceneReady={onSceneReady}
-      onRender={onRender}
-      id="my-canvas"
-      engineOptions={undefined}
-      adaptToDeviceRatio={undefined}
-      sceneOptions={undefined}
-    />
-  </div>
-);
+const RenderPage = () => {
+  return (
+    <div className="flex-grow">
+      <SceneComponent
+        antialias
+        onSceneReady={onSceneReady}
+        onRender={onRender}
+        id="my-canvas"
+        engineOptions={undefined}
+        adaptToDeviceRatio={undefined}
+        sceneOptions={undefined}
+      />
+    </div>
+  );
+};
+
+export default RenderPage;

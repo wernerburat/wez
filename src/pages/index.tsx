@@ -10,7 +10,7 @@ import Image from "next/image";
 import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import Renderpage from "./renderpage";
+import RenderPage from "~/pages/renderpage";
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
@@ -135,7 +135,7 @@ export default function Home() {
       </Head>
       <main className="flex h-screen flex-row">
         <div className="flex-grow overflow-hidden">
-          <Renderpage />
+          <RenderPage />
         </div>
         <div className="flex">
           <div className=" w-full flex-col overflow-y-auto border-x border-slate-400 md:max-w-lg">

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
-import { Engine, EngineOptions, Scene, SceneOptions } from "@babylonjs/core";
+import { Engine, Scene } from "@babylonjs/core";
+import type { EngineOptions, SceneOptions } from "@babylonjs/core";
 
 interface BabylonCanvasProps {
   antialias?: boolean;
