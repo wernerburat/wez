@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
-import { Engine, Scene } from "@babylonjs/core";
+import { Engine, EngineOptions, Scene, SceneOptions } from "@babylonjs/core";
 
 interface BabylonCanvasProps {
   antialias?: boolean;
-  engineOptions?: any;
+  engineOptions?: EngineOptions;
   adaptToDeviceRatio?: boolean;
-  sceneOptions?: any;
+  sceneOptions?: SceneOptions;
   onRender?: (scene: Scene) => void;
   onSceneReady: (scene: Scene) => void;
   [x: string]: unknown;
