@@ -1,68 +1,117 @@
-import React from "react";
-import type { Scene } from "@babylonjs/core";
-import SceneComponent from "~/components/babylon/SceneComponent";
+import React, { useRef, useState } from "react";
 import {
-  FreeCamera,
-  Vector3,
-  HemisphericLight,
-  MeshBuilder,
-  Mesh,
-} from "@babylonjs/core";
+  Engine,
+  Scene,
+  useBeforeRender,
+  useClick,
+  useHover,
+} from "react-babylonjs";
 
-let box: Mesh;
+import { Mesh } from "@babylonjs/core/Meshes/mesh";
+import { Vector3 } from "@babylonjs/core/Maths/math.vector";
+import { Color3 } from "@babylonjs/core/Maths/math.color";
 
-const onSceneReady = (scene: Scene) => {
-  // This creates and positions a free camera (non-mesh)
-  const camera = new FreeCamera("camera1", new Vector3(0, 5, -10), scene);
+const DefaultScale = new Vector3(1, 1, 1);
+const BiggerScale = new Vector3(1.25, 1.25, 1.25);
 
-  // This targets the camera to scene origin
-  camera.setTarget(Vector3.Zero());
-
-  const canvas = scene.getEngine().getRenderingCanvas();
-
-  // This attaches the camera to the canvas
-  camera.attachControl(canvas, true);
-
-  // This creates a light, aiming 0,1,0 - to the sky (non-mesh)
-  const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-
-  // Default intensity is 1. Let's dim the light a small amount
-  light.intensity = 0.7;
-
-  // Our built-in 'box' shape.
-  box = MeshBuilder.CreateBox("box", { size: 2 }, scene);
-
-  // Move the box upward 1/2 its height
-  box.position.y = 1;
-
-  // Our built-in 'ground' shape.
-  MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+type SpinningBoxProps = {
+  name: string;
+  position: Vector3;
+  hoveredColor: Color3;
+  color: Color3;
 };
 
-/**
- * Will run on every frame render.  We are spinning the box on y-axis.
- */
-const onRender = (scene: Scene) => {
-  if (box !== undefined) {
-    const deltaTimeInMillis = scene.getEngine().getDeltaTime();
+const SpinningBox = (props: SpinningBoxProps) => {
+  // access Babylon scene objects with same React hook as regular DOM elements
+  const boxRef = useRef<Mesh>(null);
 
-    const rpm = 10;
-    box.rotation.y += (rpm / 60) * Math.PI * 2 * (deltaTimeInMillis / 1000);
-  }
-};
+  const [clicked, setClicked] = useState(false);
+  useClick(() => setClicked((clicked) => !clicked), boxRef);
 
-const RenderPage = () => {
+  const [hovered, setHovered] = useState(false);
+  useHover(
+    () => setHovered(true),
+    () => setHovered(false),
+    boxRef,
+  );
+
+  // This will rotate the box on every Babylon frame based on sin of time
+  const rpm = 10;
+  useBeforeRender((scene) => {
+    if (boxRef.current) {
+      // Delta time smoothes the animation.
+      var deltaTimeInMillis = scene.getEngine().getDeltaTime();
+      boxRef.current.rotation.y +=
+        ((rpm / 60) * Math.PI * 2 * deltaTimeInMillis) / 1000;
+
+      // Map to sin
+      boxRef.current.scaling.y = 1 + Math.sin(boxRef.current.rotation.y) / 1;
+
+      // Map to rotation
+      boxRef.current.scaling.x = 1 + Math.sin(boxRef.current.rotation.y) / 2;
+      boxRef.current.scaling.y = 1 + Math.sin(boxRef.current.rotation.y) / 2;
+      boxRef.current.scaling.z = 1 + Math.sin(boxRef.current.rotation.y) / 2;
+
+      // Rotate on other axis as well
+      boxRef.current.rotation.x +=
+        ((rpm / 60) * Math.PI * 2 * deltaTimeInMillis) / 1000;
+      boxRef.current.rotation.z +=
+        ((rpm / 60) * Math.PI * 2 * deltaTimeInMillis) / 1000;
+
+      // Animate position
+      boxRef.current.position.y = Math.sin(boxRef.current.rotation.y) / 2;
+      boxRef.current.position.z = Math.sin(boxRef.current.rotation.y) / 2;
+    }
+  });
+
   return (
-    <SceneComponent
-      antialias
-      onSceneReady={onSceneReady}
-      onRender={onRender}
-      id="my-canvas"
-      engineOptions={undefined}
-      adaptToDeviceRatio={undefined}
-      sceneOptions={undefined}
-    />
+    <box
+      name={props.name}
+      ref={boxRef}
+      size={2}
+      position={props.position}
+      scaling={clicked ? BiggerScale : DefaultScale}
+    >
+      <standardMaterial
+        name={`${props.name}-mat`}
+        diffuseColor={hovered ? props.hoveredColor : props.color}
+        specularColor={Color3.Black()}
+      />
+    </box>
   );
 };
 
-export default RenderPage;
+export const SceneWithSpinningBoxes = () => (
+  <Engine adaptToDeviceRatio antialias canvasId="babylon-canvas">
+    <Scene>
+      <arcRotateCamera
+        name="camera1"
+        target={Vector3.Zero()}
+        alpha={Math.PI / 2}
+        beta={Math.PI / 4}
+        radius={8}
+      />
+      <hemisphericLight
+        name="light1"
+        intensity={0.8}
+        direction={Vector3.Up()}
+      />
+      <SpinningBox
+        name="left"
+        position={new Vector3(-2, 0, 0)}
+        color={Color3.FromHexString("#EEB5EB")}
+        hoveredColor={Color3.FromHexString("#C26DBC")}
+      />
+      <SpinningBox
+        name="right"
+        position={new Vector3(2, 0, 0)}
+        color={Color3.FromHexString("#C8F4F9")}
+        hoveredColor={Color3.FromHexString("#3CACAE")}
+      />
+    </Scene>
+  </Engine>
+);
+
+export default function RenderPage() {
+  return <SceneWithSpinningBoxes />;
+}
