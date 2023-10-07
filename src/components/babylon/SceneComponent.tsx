@@ -1,8 +1,17 @@
-// @ts-nocheck
 import { useEffect, useRef } from "react";
 import { Engine, Scene } from "@babylonjs/core";
 
-export default ({
+interface BabylonCanvasProps {
+  antialias?: boolean;
+  engineOptions?: any;
+  adaptToDeviceRatio?: boolean;
+  sceneOptions?: any;
+  onRender?: (scene: Scene) => void;
+  onSceneReady: (scene: Scene) => void;
+  [x: string]: unknown;
+}
+
+const SceneComponent: React.FC<BabylonCanvasProps> = ({
   antialias,
   engineOptions,
   adaptToDeviceRatio,
@@ -63,3 +72,5 @@ export default ({
 
   return <canvas className="h-full w-full" ref={reactCanvas} {...rest} />;
 };
+
+export default SceneComponent;
