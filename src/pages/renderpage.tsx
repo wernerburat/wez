@@ -193,7 +193,7 @@ const SpinningBox = (props: SpinningBoxProps) => {
   useBeforeRender((scene) => {
     if (boxRef.current) {
       // Delta time smoothes the animation.
-      let deltaTimeInMillis = scene.getEngine().getDeltaTime();
+      const deltaTimeInMillis = scene.getEngine().getDeltaTime();
       boxRef.current.rotation.y +=
         ((rpm / 60) * Math.PI * 2 * deltaTimeInMillis) / 1000;
       boxRef.current.rotation.x +=
@@ -244,7 +244,7 @@ const SpinningGroup = (props: SpinningGroupProps) => {
   };
 
   useBeforeRender((scene) => {
-    let deltaTimeInMillis = scene.getEngine().getDeltaTime();
+    const deltaTimeInMillis = scene.getEngine().getDeltaTime();
     boxGroupRef.current?.rotate(Vector3.Up(), 0.0001 * deltaTimeInMillis);
     boxGroupRef.current?.rotate(Vector3.Right(), 0.0001 * deltaTimeInMillis);
   });
