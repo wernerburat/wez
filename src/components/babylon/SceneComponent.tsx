@@ -35,6 +35,11 @@ const SceneComponent: React.FC<BabylonCanvasProps> = ({
       engineOptions,
       adaptToDeviceRatio,
     );
+
+    const resize = () => {
+      scene.getEngine().resize();
+    };
+
     const scene = new Scene(engine, sceneOptions);
     if (scene.isReady()) {
       onSceneReady(scene);
@@ -46,10 +51,6 @@ const SceneComponent: React.FC<BabylonCanvasProps> = ({
       if (typeof onRender === "function") onRender(scene);
       scene.render();
     });
-
-    const resize = () => {
-      scene.getEngine().resize();
-    };
 
     if (window) {
       window.addEventListener("resize", resize);

@@ -53,17 +53,15 @@ const onRender = (scene: Scene) => {
 
 const RenderPage = () => {
   return (
-    <div className="flex-grow">
-      <SceneComponent
-        antialias
-        onSceneReady={onSceneReady}
-        onRender={onRender}
-        id="my-canvas"
-        engineOptions={undefined}
-        adaptToDeviceRatio={undefined}
-        sceneOptions={undefined}
-      />
-    </div>
+    <SceneComponent
+      antialias
+      onSceneReady={onSceneReady}
+      onRender={onRender}
+      id="my-canvas"
+      engineOptions={undefined}
+      adaptToDeviceRatio={undefined}
+      sceneOptions={undefined}
+    />
   );
 };
 
