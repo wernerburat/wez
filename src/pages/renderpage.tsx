@@ -4,7 +4,7 @@ import { Engine, Scene, useBeforeRender, useHover } from "react-babylonjs";
 import { api } from "~/utils/api";
 import type { RouterOutputs } from "~/utils/api";
 
-import { Mesh } from "@babylonjs/core/Meshes/mesh";
+import type { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { Color3 } from "@babylonjs/core/Maths/math.color";
 import { DynamicTexture } from "@babylonjs/core";
@@ -279,10 +279,7 @@ export const SceneWithSpinningBoxes = () => {
           intensity={0.8}
           direction={Vector3.Up()}
         />
-        <SpinningGroup
-          data={data! as PostsWithUser}
-          postsLoading={postsLoading}
-        />
+        <SpinningGroup data={data!} postsLoading={postsLoading} />
       </Scene>
     </Engine>
   );
