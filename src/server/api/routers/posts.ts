@@ -37,7 +37,7 @@ const ratelimit = new Ratelimit({
 export const postsRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
     const posts = await ctx.db.post.findMany({
-      take: 5,
+      take: 100,
       orderBy: [{ createdAt: "desc" }],
     });
 
