@@ -1,18 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Engine,
-  Scene,
-  useBeforeRender,
-  useClick,
-  useHover,
-} from "react-babylonjs";
+import { Engine, Scene, useBeforeRender, useHover } from "react-babylonjs";
 
-import { RouterOutputs, api } from "~/utils/api";
+import { api } from "~/utils/api";
+import type { RouterOutputs } from "~/utils/api";
 
 import { Mesh } from "@babylonjs/core/Meshes/mesh";
 import { Vector3 } from "@babylonjs/core/Maths/math.vector";
 import { Color3 } from "@babylonjs/core/Maths/math.color";
-import { DynamicTexture, TransformNode } from "@babylonjs/core";
+import { DynamicTexture } from "@babylonjs/core";
+
+import type { TransformNode } from "@babylonjs/core";
 import { Animation } from "@babylonjs/core/Animations";
 
 const StartScale = new Vector3(0, 0, 0);
@@ -33,9 +30,6 @@ const SpinningBox = (props: SpinningBoxProps) => {
   const prevDataRef = useRef<PostWithUser | null>(null);
 
   const [boxScale, setBoxScale] = useState<Vector3>(StartScale);
-
-  const [clicked, setClicked] = useState(false);
-  useClick(() => setClicked((clicked) => !clicked), boxRef);
 
   const [hovered, setHovered] = useState(false);
   useHover(
@@ -286,7 +280,7 @@ export const SceneWithSpinningBoxes = () => {
           direction={Vector3.Up()}
         />
         <SpinningGroup
-          data={data as PostsWithUser}
+          data={data! as PostsWithUser}
           postsLoading={postsLoading}
         />
       </Scene>
