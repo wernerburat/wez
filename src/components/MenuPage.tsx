@@ -1,6 +1,6 @@
-// components/MenuPage.tsx
 import React, { useState } from "react";
 import { MenuButton } from "~/components/MenuButton";
+import { Title } from "./Title";
 
 type MenuPageType = "default" | "additional";
 
@@ -15,19 +15,31 @@ const MenuPage: React.FC<MenuPageProps> = ({ setCurrentView }) => {
     return (
       <div className="menu-page-default">
         <div className="menu">
-          <div className="buttons-container flex gap-4">
+          <div className="pages">
+            <button onClick={() => setCurrentPage("additional")}>Page 2</button>
+          </div>
+          <Title>
+            <span>Navigate to</span>
+          </Title>
+          <div className="buttons-container align-start flex flex-col gap-4">
             <MenuButton
+              className="flex justify-start"
+              label="Home"
+              view=""
+              setCurrentView={setCurrentView}
+            />
+            <MenuButton
+              className="flex justify-start"
               label="Feed"
               view="feed"
               setCurrentView={setCurrentView}
             />
             <MenuButton
+              className="flex justify-start"
               label="Moosik"
               view="moosik"
               setCurrentView={setCurrentView}
             />
-            <MenuButton label="Home" view="" setCurrentView={setCurrentView} />
-            <button onClick={() => setCurrentPage("additional")}>Page 2</button>
           </div>
         </div>
       </div>

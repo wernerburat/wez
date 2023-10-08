@@ -11,11 +11,6 @@ export const AutoAnimate: React.FC<Props> = ({
   children,
   ...rest
 }) => {
-  const options: AutoAnimateOptions = {
-    duration: 300,
-    easing: "ease-in-out",
-    disrespectUserMotionPreference: true,
-  };
   const [ref] = useAutoAnimate<HTMLElement>();
   return (
     <Tag ref={ref} {...rest}>

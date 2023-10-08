@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useMenu } from "../contexts/MenuContext";
 import MenuPage from "./MenuPage";
-import { AutoAnimate } from "./auto-animate";
 
 interface MenuProps {
   setCurrentView: React.Dispatch<React.SetStateAction<ViewType>>;
@@ -11,43 +10,44 @@ const Menu: React.FC<MenuProps> = ({ setCurrentView }) => {
   const { isMenuOpen, openMenu, closeMenu } = useMenu();
 
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) =>
-      e.key === "Escape" && isMenuOpen ? closeMenu() : openMenu();
+    const handleEsc = (e: KeyboardEvent) => e.key === "Escape" && toggleMenu();
 
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [isMenuOpen, openMenu, closeMenu]);
 
+  const toggleMenu = () => (isMenuOpen ? closeMenu() : openMenu());
+
+  const menuStyle = isMenuOpen
+    ? {
+        transform: "translateX(0%)",
+        transition: "transform 0.5s ease-in-out",
+      }
+    : {
+        transform: "translateX(-100%)",
+        transition: "transform 0.3s ease-in-out",
+      };
+
   return (
     <div>
-      {/* Icon to open menu */}
       <div
-        onClick={openMenu}
-        style={{ position: "fixed", top: "10px", left: "10px" }}
+        onClick={toggleMenu}
+        className="absolute left-2 top-2 z-50 flex h-8 w-8 cursor-pointer items-center
+        justify-center rounded-sm bg-slate-200 shadow-xl transition-colors duration-300
+      hover:bg-slate-300"
       >
-        ≡
+        <span className=" text-slate-900">≡</span>
       </div>
       <div style={{ overflow: "hidden" }}>
-        <AutoAnimate>
-          {/* Actual Menu */}
-          {isMenuOpen && (
-            <div
-              className="menu"
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "30vw",
-                height: "50vh",
-                background: "rgba(100, 0, 0, 0.7)",
-                color: "white",
-                zIndex: 1000,
-              }}
-            >
-              <MenuPage setCurrentView={setCurrentView} />
-            </div>
-          )}
-        </AutoAnimate>
+        {/* Actual Menu */}
+        <div
+          className="menu fixed inset-0 z-40 flex h-1/2 w-1/4  bg-slate-600 bg-opacity-70 p-4 pl-10"
+          style={{
+            ...menuStyle,
+          }}
+        >
+          <MenuPage setCurrentView={setCurrentView} />
+        </div>
       </div>
     </div>
   );
