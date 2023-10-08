@@ -9,6 +9,8 @@ const Menu: React.FC<{
 }> = ({ setCurrentView }) => (
   <>
     <Title className="flex justify-center">Wez Stuff</Title>
+
+    {/* Create a MenuPage component out of this*/}
     <div className="menu">
       <div className="buttons-container flex gap-4">
         <MenuButton label="Feed" view="feed" setCurrentView={setCurrentView} />
