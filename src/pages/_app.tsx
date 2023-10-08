@@ -14,7 +14,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     <ClerkProvider {...pageProps}>
       <Toaster position="bottom-center" />
       <MenuProvider>
-        <Menu />
         <Component {...pageProps} />
       </MenuProvider>
     </ClerkProvider>

@@ -1,7 +1,13 @@
 import { useEffect } from "react";
 import { useMenu } from "../contexts/MenuContext";
+import MenuPage from "./MenuPage";
+import { AutoAnimate } from "./auto-animate";
 
-const Menu: React.FC = () => {
+interface MenuProps {
+  setCurrentView: React.Dispatch<React.SetStateAction<ViewType>>;
+}
+
+const Menu: React.FC<MenuProps> = ({ setCurrentView }) => {
   const { isMenuOpen, openMenu, closeMenu } = useMenu();
 
   useEffect(() => {
@@ -10,7 +16,7 @@ const Menu: React.FC = () => {
 
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
-  }, [closeMenu, openMenu]);
+  }, [isMenuOpen, openMenu, closeMenu]);
 
   return (
     <div>
@@ -21,26 +27,28 @@ const Menu: React.FC = () => {
       >
         ≡
       </div>
-
-      {/* Actual Menu */}
-      {isMenuOpen && (
-        <div
-          className="menu"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            background: "rgba(0, 0, 0, 0.7)",
-            color: "white",
-            zIndex: 1000,
-          }}
-        >
-          Menu is Open!
-          {/* Add more menu content here */}
-        </div>
-      )}
+      <div style={{ overflow: "hidden" }}>
+        <AutoAnimate>
+          {/* Actual Menu */}
+          {isMenuOpen && (
+            <div
+              className="menu"
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "30vw",
+                height: "50vh",
+                background: "rgba(100, 0, 0, 0.7)",
+                color: "white",
+                zIndex: 1000,
+              }}
+            >
+              <MenuPage setCurrentView={setCurrentView} />
+            </div>
+          )}
+        </AutoAnimate>
+      </div>
     </div>
   );
 };
