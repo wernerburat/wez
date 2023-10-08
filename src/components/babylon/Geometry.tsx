@@ -92,7 +92,7 @@ export const Geometry = (props: GeometryProps) => {
 
   const handleBoxClick = (position: Vector3) => {
     if (activeCameraRef.current) {
-      moveActiveCamera(activeCameraRef.current, position);
+      moveActiveCamera(activeCameraRef.current, position, false);
       setCounter((counter) => counter + 1);
     }
   };

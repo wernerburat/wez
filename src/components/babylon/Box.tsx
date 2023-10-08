@@ -27,7 +27,7 @@ export const CustomizedBox = (props: {
 
   const handleBoxClick = () => {
     setClicked((clicked) => !clicked);
-    props.onBoxClick(boxRef.current?.position || Vector3.Zero());
+    props.onBoxClick(boxRef.current?.position ?? Vector3.Zero());
   };
 
   useClick(handleBoxClick, boxRef);

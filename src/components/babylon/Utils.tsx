@@ -62,7 +62,7 @@ export const moveMesh = (mesh: AbstractMesh, target: Vector3) => {
 export const moveActiveCamera = (
   camera: ArcRotateCamera,
   target: Vector3,
-  resetAlpha: boolean = false,
+  resetAlpha: boolean,
 ) => {
   const animations = [
     createAnimation({ property: "beta", from: camera.beta, to: Math.PI / 3 }),
