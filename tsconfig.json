@@ -28,7 +28,8 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs",
-    "./node_modules/@babylonjs/**/*"
+    "./node_modules/@babylonjs/**/*",
+    "declarations.d.ts"
   ],
   "exclude": ["node_modules"]
 }
