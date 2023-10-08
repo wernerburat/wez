@@ -15,10 +15,10 @@ const MenuPage: React.FC<MenuPageProps> = ({ setCurrentView }) => {
     return (
       <div className="menu-page-default">
         <div className="menu">
-          <div className="pages">
+          {/* <div className="pages">
             <button onClick={() => setCurrentPage("additional")}>Page 2</button>
-          </div>
-          <Title>
+          </div> */}
+          <Title className="pb-4">
             <span>Navigate to</span>
           </Title>
           <div className="buttons-container align-start flex flex-col gap-4">
