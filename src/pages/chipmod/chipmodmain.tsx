@@ -169,8 +169,6 @@ const PlaybackButton = ({
   </button>
 );
 
-const DataViewer = () => {};
-
 export default function ChipModMain() {
   const { arrayBufferState, handleFileChange } = useFileReader();
   const sceneRef = useSceneReference();

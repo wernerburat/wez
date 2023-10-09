@@ -87,8 +87,8 @@ export const TDC = () => {
         // Peak frequency value
         const peakValue = Math.max(...data).toFixed(1);
 
-        textureRef.current!.getContext().clearRect(0, 0, 512, 512);
-        textureRef.current!.drawText(
+        textureRef.current.getContext().clearRect(0, 0, 512, 512);
+        textureRef.current.drawText(
           `Bass Avg: ${bassAvg}`,
           10,
           40,
@@ -98,7 +98,7 @@ export const TDC = () => {
           false,
           false,
         );
-        textureRef.current!.drawText(
+        textureRef.current.drawText(
           `Treble Avg: ${trebleAvg}`,
           10,
           80,
@@ -108,7 +108,7 @@ export const TDC = () => {
           false,
           false,
         );
-        textureRef.current!.drawText(
+        textureRef.current.drawText(
           `Overall Avg: ${overallAvg}`,
           10,
           120,
@@ -118,7 +118,7 @@ export const TDC = () => {
           false,
           false,
         );
-        textureRef.current!.drawText(
+        textureRef.current.drawText(
           `Peak Value: ${peakValue}`,
           10,
           160,
@@ -128,7 +128,7 @@ export const TDC = () => {
           false,
           false,
         );
-        textureRef.current!.update();
+        textureRef.current.update();
       }
     }
   });
