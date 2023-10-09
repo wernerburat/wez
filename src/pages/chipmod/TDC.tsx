@@ -34,7 +34,7 @@ export const useAverageFrequencyAnimation = (
   });
 };
 
-export const useTexture = () => {
+const useTexture = () => {
   const textureRef = useRef<DynamicTexture>(
     new DynamicTexture("dt", { width: 512, height: 512 }, useScene(), false, 0),
   );
@@ -42,7 +42,7 @@ export const useTexture = () => {
   return textureRef;
 };
 
-export const TDC = () => {
+export default function TDC() {
   const scene = useScene();
   const { byteFrequencyRef } = useAnalyser(scene);
   const boxRef = useRef(null);
@@ -138,7 +138,7 @@ export const TDC = () => {
       </box>
     </>
   );
-};
+}
 
 export const useTrackProgress = (
   soundRef: React.MutableRefObject<Sound | null>,

@@ -7,7 +7,7 @@ import { Analyser as EAnalyser } from "@babylonjs/core/Audio/analyser";
 import { Camera } from "~/components/babylon/Camera";
 import { Vector3, Sound } from "@babylonjs/core";
 import type { Scene as BabylonScene } from "@babylonjs/core/";
-import { TDC } from "./TDC";
+import TDC from "./TDC";
 
 const useSceneReference = () => {
   return useRef<BabylonScene | null>(useScene());
