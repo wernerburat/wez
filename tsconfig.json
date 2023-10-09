@@ -29,7 +29,8 @@
     "**/*.cjs",
     "**/*.mjs",
     "./node_modules/@babylonjs/**/*",
-    "declarations.d.ts"
+    "declarations.d.ts",
+    "src/pages/chipmod/chiptune2/chiptune2.tsx_"
   ],
   "exclude": ["node_modules"]
 }

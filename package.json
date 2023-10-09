@@ -36,6 +36,7 @@
   },
   "devDependencies": {
     "@babylonjs/inspector": "^6.23.0",
+    "@crossaudio/mod": "^0.1.23",
     "@types/eslint": "^8.44.2",
     "@types/node": "^18.16.0",
     "@types/react": "^18.2.20",
