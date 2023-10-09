@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import PostsMain from "~/pages/postsmain";
 import ChipModMain from "~/pages/chipmod/chipmodmain";
 import Menu from "~/components/Menu";

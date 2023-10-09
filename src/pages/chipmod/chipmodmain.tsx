@@ -43,22 +43,6 @@ const useSound = (scene: BabylonScene | null) => {
   return { soundRef, isSoundReady };
 };
 
-const useSoundPlayback = (
-  soundRef: React.MutableRefObject<Sound | null>,
-  playing: boolean,
-  ready: boolean,
-) => {
-  useEffect(() => {
-    if (ready) {
-      if (playing) {
-        soundRef.current?.play();
-      } else {
-        soundRef.current?.pause();
-      }
-    }
-  }, [playing, ready, soundRef]);
-};
-
 const DefaultSound = (props: { playing: boolean }) => {
   const sceneRef = useSceneReference();
   const { soundRef, isSoundReady } = useSound(sceneRef.current);
@@ -103,28 +87,6 @@ export const useAnalyser = (scene: BabylonScene | null) => {
   return { analyserRef, byteTimeRef, byteFrequencyRef };
 };
 
-const useFileReader = () => {
-  const [arrayBufferState, setArrayBufferState] = useState<ArrayBuffer | null>(
-    null,
-  );
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const arrayBuffer = e.target?.result;
-        if (arrayBuffer) {
-          setArrayBufferState(new Uint8Array(arrayBuffer as ArrayBuffer));
-        }
-      };
-      reader.readAsArrayBuffer(file);
-    }
-  };
-
-  return { arrayBufferState, handleFileChange };
-};
-
 const useAudioPlayback = () => {
   const [playing, setPlaying] = useState(false);
 
@@ -138,19 +100,6 @@ const useAudioPlayback = () => {
 
   return { playing, togglePlayback };
 };
-
-// const FileInput = ({
-//   onChange,
-// }: {
-//   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-// }) => (
-//   <input
-//     type="file"
-//     id="file-input"
-//     style={{ display: "none" }}
-//     onChange={onChange}
-//   ></input>
-// );
 
 const PlaybackButton = ({
   playing,

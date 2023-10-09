@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import { ArcRotateCamera } from "@babylonjs/core";
-import { Scene as BabylonScene } from "@babylonjs/core/";
+import type { ArcRotateCamera } from "@babylonjs/core";
+import type { Scene as BabylonScene } from "@babylonjs/core/";
 
 export const useActiveCamera = (scene: BabylonScene | null) => {
   const cameraRef = useRef<ArcRotateCamera | null>(null); // Initialize with null
