@@ -1,16 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useBeforeRender, useScene } from "react-babylonjs";
-import {
-  Color3,
-  DynamicTexture,
-  Mesh,
-  Sound,
-  StandardMaterial,
-  Vector3,
-} from "@babylonjs/core";
-import { useActiveCamera } from "../../components/chipmod/useActiveCamera";
-import { useMainSound, useAnalyser } from "./chipmodmain";
-import { ArcRotateCamera, PBRMaterial } from "@babylonjs/core";
+import { DynamicTexture, Vector3 } from "@babylonjs/core";
+import { useAnalyser } from "./chipmodmain";
+import type { Mesh, Sound } from "@babylonjs/core";
+import type { ArcRotateCamera } from "@babylonjs/core";
 
 export const useAverageFrequencyAnimation = (
   cameraRef: React.MutableRefObject<ArcRotateCamera | null>,
@@ -51,10 +44,7 @@ export const useTexture = () => {
 
 export const TDC = () => {
   const scene = useScene();
-  const cameraRef = useActiveCamera(scene);
-  const soundRef = useMainSound(scene);
-  const { analyserRef, byteFrequencyRef } = useAnalyser(scene);
-  const progress = useTrackProgress(soundRef);
+  const { byteFrequencyRef } = useAnalyser(scene);
   const boxRef = useRef(null);
 
   const textureRef = useTexture();

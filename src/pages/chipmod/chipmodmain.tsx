@@ -5,9 +5,9 @@ import { Engine, Scene, useScene } from "react-babylonjs";
 import { Engine as EEngine } from "@babylonjs/core/Engines/engine";
 import { Analyser as EAnalyser } from "@babylonjs/core/Audio/analyser";
 import { Camera } from "~/components/babylon/Camera";
-import { Vector3, Sound, Analyser } from "@babylonjs/core";
-import { Scene as BabylonScene } from "@babylonjs/core/";
-import { TDC, useTrackProgress } from "./TDC";
+import { Vector3, Sound } from "@babylonjs/core";
+import type { Scene as BabylonScene } from "@babylonjs/core/";
+import { TDC } from "./TDC";
 
 const useSceneReference = () => {
   return useRef<BabylonScene | null>(useScene());
@@ -139,18 +139,18 @@ const useAudioPlayback = () => {
   return { playing, togglePlayback };
 };
 
-const FileInput = ({
-  onChange,
-}: {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}) => (
-  <input
-    type="file"
-    id="file-input"
-    style={{ display: "none" }}
-    onChange={onChange}
-  ></input>
-);
+// const FileInput = ({
+//   onChange,
+// }: {
+//   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+// }) => (
+//   <input
+//     type="file"
+//     id="file-input"
+//     style={{ display: "none" }}
+//     onChange={onChange}
+//   ></input>
+// );
 
 const PlaybackButton = ({
   playing,
@@ -170,9 +170,6 @@ const PlaybackButton = ({
 );
 
 export default function ChipModMain() {
-  const { arrayBufferState, handleFileChange } = useFileReader();
-  const sceneRef = useSceneReference();
-  const soundRef = useSound(sceneRef.current);
   const { playing, togglePlayback } = useAudioPlayback();
 
   return (
