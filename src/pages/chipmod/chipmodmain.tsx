@@ -1,18 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Title } from "~/components/Title";
 
-import { Engine, Scene, useBeforeRender, useScene } from "react-babylonjs";
+import { Engine, Scene, useScene } from "react-babylonjs";
 import { Engine as EEngine } from "@babylonjs/core/Engines/engine";
 import { Analyser as EAnalyser } from "@babylonjs/core/Audio/analyser";
 import { Camera } from "~/components/babylon/Camera";
-import { Vector3, ArcRotateCamera, Sound, Analyser } from "@babylonjs/core";
+import { Vector3, Sound, Analyser } from "@babylonjs/core";
 import { Scene as BabylonScene } from "@babylonjs/core/";
+import { TDC, useTrackProgress } from "./TDC";
 
 const useSceneReference = () => {
   return useRef<BabylonScene | null>(useScene());
 };
 
-const useSound = (scene: BabylonScene | null, onSoundReady: () => void) => {
+const useSound = (scene: BabylonScene | null) => {
   const soundRef = useRef<Sound | null>(null);
   const [isSoundReady, setSoundReady] = useState(false);
   useEffect(() => {
@@ -20,7 +21,7 @@ const useSound = (scene: BabylonScene | null, onSoundReady: () => void) => {
       console.log("Creating sound");
       soundRef.current = new Sound(
         "sound-1",
-        "music/trance.mp3",
+        "music/test2.mp3",
         scene,
         () => {
           setSoundReady(true);
@@ -60,7 +61,7 @@ const useSoundPlayback = (
 
 const DefaultSound = (props: { playing: boolean }) => {
   const sceneRef = useSceneReference();
-  const { soundRef, isSoundReady } = useSound(sceneRef.current, () => {});
+  const { soundRef, isSoundReady } = useSound(sceneRef.current);
 
   useEffect(() => {
     if (isSoundReady) {
@@ -75,63 +76,31 @@ const DefaultSound = (props: { playing: boolean }) => {
   return null; // Return null for components that don't render anything
 };
 
-const useActiveCamera = (scene: BabylonScene | null) => {
-  const cameraRef = useRef<ArcRotateCamera | null>(null); // Initialize with null
-  useEffect(() => {
-    if (!cameraRef.current && scene) {
-      cameraRef.current = scene.activeCamera as ArcRotateCamera;
-    }
-  }, [scene]);
-  return cameraRef;
-};
-
-const useMainSound = (scene: BabylonScene | null) => {
-  const soundRef = useRef<Sound | null>();
+export const useMainSound = (scene: BabylonScene | null) => {
+  const soundRef = useRef<Sound | null>(null);
   useEffect(() => {
     if (!soundRef.current && scene) {
-      soundRef.current = scene.mainSoundTrack.soundCollection[0];
+      soundRef.current = scene.mainSoundTrack.soundCollection[0]!;
     }
   }, [scene]);
   return soundRef;
 };
 
-const useAnalyser = (scene: BabylonScene | null) => {
+export const useAnalyser = (scene: BabylonScene | null) => {
   const analyserRef = useRef<EAnalyser | null>(null); // Initialize with null
+  const byteTimeRef = useRef<Uint8Array | null>(null); // Initialize with null
   const byteFrequencyRef = useRef<Uint8Array | null>(null); // Initialize with null
+
   useEffect(() => {
     if (!analyserRef.current && scene) {
       analyserRef.current = new EAnalyser(scene);
       analyserRef.current.drawDebugCanvas();
       EEngine.audioEngine?.connectToAnalyser(analyserRef.current);
+      byteTimeRef.current = analyserRef.current.getByteTimeDomainData();
       byteFrequencyRef.current = analyserRef.current.getByteFrequencyData();
     }
   }, [scene]);
-  return { analyserRef, byteFrequencyRef };
-};
-
-const useAverageFrequencyAnimation = (
-  cameraRef: React.MutableRefObject<ArcRotateCamera | null>,
-  byteFrequencyRef: React.MutableRefObject<Uint8Array | null>,
-) => {
-  useBeforeRender(() => {
-    if (byteFrequencyRef.current) {
-      const avg = byteFrequencyRef.current.reduce((a, b) => a + b, 0) / 128;
-      if (cameraRef.current) {
-        cameraRef.current.alpha += avg / 100000;
-      }
-    }
-  });
-};
-
-const TDC = () => {
-  const scene = useScene();
-  const cameraRef = useActiveCamera(scene);
-  const soundRef = useMainSound(scene);
-  const { analyserRef, byteFrequencyRef } = useAnalyser(scene);
-
-  useAverageFrequencyAnimation(cameraRef, byteFrequencyRef);
-
-  return <box name="box" size={2} position={new Vector3(0, 0, 0)}></box>;
+  return { analyserRef, byteTimeRef, byteFrequencyRef };
 };
 
 const useFileReader = () => {
@@ -200,19 +169,23 @@ const PlaybackButton = ({
   </button>
 );
 
+const DataViewer = () => {};
+
 export default function ChipModMain() {
   const { arrayBufferState, handleFileChange } = useFileReader();
+  const sceneRef = useSceneReference();
+  const soundRef = useSound(sceneRef.current);
   const { playing, togglePlayback } = useAudioPlayback();
 
   return (
     <>
-      <div className="engine-stuff z-1 opacity-100">
+      <div className="engine-stuff z-1 opacity-80">
         <Engine canvasId="chipmod-canvas" className="absolute">
           <Scene>
             <Camera />
             <hemisphericLight
               name="light1"
-              intensity={0.9}
+              intensity={0}
               direction={new Vector3(-1, 0, 0)}
             />
             <DefaultSound playing={playing} />
@@ -222,11 +195,11 @@ export default function ChipModMain() {
       </div>
       <div className="h-screen overflow-hidden bg-gradient-to-br from-pink-100 via-green-200 to-emerald-200">
         <div className="html-stuff">
-          <Title className="flex justify-center font-extralight text-emerald-600">
+          <Title className="z-10 flex justify-center font-extralight text-emerald-600">
             Sound demo
           </Title>
           <div className="mt-4 flex h-full items-stretch justify-center">
-            <FileInput onChange={handleFileChange} />
+            {/* <FileInput onChange={handleFileChange} /> */}
             <PlaybackButton playing={playing} onClick={togglePlayback} />
           </div>
         </div>
