@@ -28,8 +28,6 @@ type CreateRibbonOptions = Parameters<typeof MeshBuilder.CreateRibbon>[1];
 const useMeshBuilder = () => {
   const { scene } = useBabylon();
 
-  //if (!scene) throw new Error("No scene found in context");
-
   const createBox = (name: string, options?: CreateBoxOptions) =>
     MeshBuilder.CreateBox(name, options, scene);
   const createSphere = (name: string, options?: CreateSphereOptions) =>
