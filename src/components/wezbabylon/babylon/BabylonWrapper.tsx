@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
-import BabylonProvider from "./BabylonProvider";
-import MeshRenderer from "./MeshRenderer"; // Composant enfant que nous allons créer.
-import { useBabylon } from "./context/BabylonContext";
+import MeshRenderer from "../Scene"; // Composant enfant que nous allons créer.
+import { useBabylon } from "../context/BabylonContext";
 import {
   FreeCamera,
   HemisphericLight,
   MeshBuilder,
   Vector3,
 } from "@babylonjs/core";
-import { Camera } from "../babylon/Camera";
 
 const BabylonWrapper: React.FC = () => {
   const { scene, engine, canvasRef } = useBabylon();

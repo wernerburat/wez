@@ -1,7 +1,7 @@
 import React from "react";
-import { BabylonContext } from "./context/BabylonContext";
-import { useBabylonEngine } from "./hook/useBabylonEngine";
-import useBabylonScene from "./hook/useBabylonScene";
+import { BabylonContext } from "../context/BabylonContext";
+import { useBabylonEngine } from "../hook/useBabylonEngine";
+import useBabylonScene from "../hook/useBabylonScene";
 
 interface Props {
   children: React.ReactNode;

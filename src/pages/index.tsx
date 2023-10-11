@@ -3,9 +3,9 @@ import PostsMain from "~/pages/postsmain";
 import Menu from "~/components/Menu";
 import { Title } from "~/components/Title";
 import MenuPage from "~/components/MenuPage";
-import BabylonProvider from "~/components/wezbabylon/BabylonProvider";
+import BabylonProvider from "~/components/wezbabylon/babylon/BabylonProvider";
 import { Camera } from "~/components/babylon/Camera";
-import BabylonWrapper from "~/components/wezbabylon/BabylonWrapper";
+import BabylonWrapper from "~/components/wezbabylon/babylon/BabylonWrapper";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<ViewType>("moosik");
