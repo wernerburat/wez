@@ -23,9 +23,6 @@ export default function Home() {
       {currentView === "feed" && <PostsMain />}
       {currentView === "moosik" && (
         <>
-          {/* <ShowDebugProvider>
-            <ChipModMain />
-          </ShowDebugProvider> */}
           <BabylonProvider>
             <BabylonWrapper />
           </BabylonProvider>
