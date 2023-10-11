@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import useBeatEasing from "../useBeatEasing";
 import { useScene } from "react-babylonjs";
 import useBeat from "~/components/chipmod/useBeat";
-import type { VisualizerProps } from "./VisType";
+import type { VisualizerProps } from "../../../types/components/VisType";
 
 export const BoxVisualizer = ({ ...props }: VisualizerProps) => {
   // Scene setup:

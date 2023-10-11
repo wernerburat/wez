@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
 
 import { useEffect, useRef } from "react";
-import type { VisualizerProps } from "./VisType";
+import type { VisualizerProps } from "../../../types/components/VisType";
 import { useActiveCamera } from "~/components/chipmod/useActiveCamera";
 import {
   Color3,
