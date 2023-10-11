@@ -2,22 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { Title } from "~/components/Title";
 
 import { Engine as EEngine } from "@babylonjs/core/Engines/engine";
-import type { Scene as BabylonScene, WebGPUEngine } from "@babylonjs/core/";
-import {
-  Engine,
-  Scene,
-  useScene,
-  useBeforeRender,
-  useEngine,
-} from "react-babylonjs";
+import type { Scene as BabylonScene } from "@babylonjs/core/";
+import { Engine, Scene, useScene, useBeforeRender } from "react-babylonjs";
 import { Camera } from "~/components/babylon/Camera";
-import { Vector3, Sound, EngineFactory } from "@babylonjs/core";
-import { EngineCanvasContext } from "react-babylonjs";
+import { Sound } from "@babylonjs/core";
 import TDC from "./TDC";
-import {
-  ShowDebugProvider,
-  useShowDebug,
-} from "~/components/chipmod/providers/ShowDebugContext";
+import { useShowDebug } from "~/components/chipmod/providers/ShowDebugContext";
 
 const useSceneReference = () => {
   return useRef<BabylonScene | null>(useScene());
@@ -161,7 +151,7 @@ export default function ChipModMain() {
           <Scene>
             <Camera />
             <DefaultSound playing={playing} />
-            <TDC showDebug={debugging} />
+            <TDC />
           </Scene>
         </Engine>
       </div>
