@@ -1,10 +1,11 @@
 import { useState } from "react";
 import PostsMain from "~/pages/postsmain";
-import ChipModMain from "~/pages/chipmod/chipmodmain";
 import Menu from "~/components/Menu";
 import { Title } from "~/components/Title";
 import MenuPage from "~/components/MenuPage";
-import { ShowDebugProvider } from "~/components/chipmod/providers/ShowDebugContext";
+import BabylonProvider from "~/components/wezbabylon/BabylonProvider";
+import { Camera } from "~/components/babylon/Camera";
+import TestBabylonRender from "~/components/wezbabylon/TestBabylonRender";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<ViewType>("moosik");
@@ -26,7 +27,9 @@ export default function Home() {
           {/* <ShowDebugProvider>
             <ChipModMain />
           </ShowDebugProvider> */}
-          <BabylonSetup />
+          <BabylonProvider>
+            <TestBabylonRender />
+          </BabylonProvider>
         </>
       )}
     </div>
