@@ -8,7 +8,7 @@ import { useCurrentTime } from "~/pages/chipmod/chipmodmain";
  * @param offset - Delay before the first beat in milliseconds.
  * @param onBeat - Callback function to be called on every beat.
  */
-const useBeat = (bpm: number, offset: number = 0, onBeat: () => void) => {
+const useBeat = (bpm: number, offset = 0, onBeat: () => void) => {
   const curTimeRef = useCurrentTime();
   const intervalRef = useRef<number | null>(null);
   const beatCountRef = useRef(0);

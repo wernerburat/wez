@@ -32,7 +32,7 @@ export const Easings: Record<string, EasingFunction> = {
     t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t,
   // smoother step function
   easeInOutSmoother: function (t) {
-    var ts = t * t,
+    const ts = t * t,
       tc = ts * t;
     return 6 * tc * ts - 15 * ts * ts + 10 * tc;
   },
