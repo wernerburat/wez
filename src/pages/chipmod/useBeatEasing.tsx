@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Sound } from "@babylonjs/core";
+import { type MutableRefObject, useState } from "react";
+import { type Sound } from "@babylonjs/core";
 import { Easings } from "~/components/chipmod/easings";
 
 type BeatEasingReturn = [number, () => void];
 export const useBeatEasing = (
-  soundRef: React.MutableRefObject<Sound | null>,
-  easingType: string = "linear",
-  duration: number = 1000,
+  soundRef: MutableRefObject<Sound | null>,
+  easingType = "linear",
+  duration = 1000,
 ): BeatEasingReturn => {
   const [easingValue, setEasingValue] = useState(0);
   const easing = Easings[easingType];

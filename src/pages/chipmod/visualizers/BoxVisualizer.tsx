@@ -1,9 +1,9 @@
-import { DynamicTexture, Mesh, Vector3 } from "@babylonjs/core";
+import { DynamicTexture, type Mesh, Vector3 } from "@babylonjs/core";
 import { useRef, useState } from "react";
 import { useBeatEasing } from "../useBeatEasing";
 import { useScene } from "react-babylonjs";
 import useBeat from "~/components/chipmod/useBeat";
-import { VisualizerProps } from "./VisType";
+import { type VisualizerProps } from "./VisType";
 
 export const BoxVisualizer = ({ ...props }: VisualizerProps) => {
   // Scene setup:
@@ -11,15 +11,17 @@ export const BoxVisualizer = ({ ...props }: VisualizerProps) => {
 
   // Visualizer setup:
   const boxRef = useRef<Mesh | null>(null);
-  const [texture, setTexture] = useState(new DynamicTexture("dt", 512, scene));
+  const [texture] = useState(new DynamicTexture("dt", 512, scene));
 
   // Easing setup:
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [easingValue, animateBeat] = useBeatEasing(
     props.soundRef,
     "easeOutQuad",
     500,
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const drawText = (text: string, x: number, y: number) => {
     texture.drawText(
       text,

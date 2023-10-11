@@ -1,15 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { useBeforeRender, useEngine, useScene } from "react-babylonjs";
-import useAnalyser from "~/components/chipmod/useAnalyser";
+import { useState } from "react";
+import { useScene } from "react-babylonjs";
 import BoxVisualizer from "./visualizers/BoxVisualizer";
 import { useMainSound } from "./chipmodmain";
-import CylinderVisualizer from "./visualizers/CylinderVisualizer";
 import ProceduralVisualizer from "./visualizers/ProceduralVisualizer";
 
-type TDCProps = {
-  showDebug: boolean;
-};
-export default function TDC({ showDebug }: TDCProps) {
+export default function TDC() {
   // Todo: Fix this
   const bpm = 133;
   const offset = 20;
@@ -17,26 +12,15 @@ export default function TDC({ showDebug }: TDCProps) {
   const scene = useScene();
   const soundRef = useMainSound(scene);
 
-  const [visType, setVisType] = useState<"box" | "cylinder" | "sky">("sky");
+  const [visType] = useState<"box" | "cylinder" | "sky">("sky");
 
-  const { byteFrequencyRef } = useAnalyser(scene, showDebug);
-  const [freqData, setFreqData] = useState<Uint8Array>(new Uint8Array(0));
-
-  const FRAME_INTERVAL = 30;
+  const [freqData] = useState<Uint8Array>(new Uint8Array(0));
 
   // Create a material and set its diffuse texture to the dynamic texture
   return (
     <>
       {visType == "box" && (
         <BoxVisualizer
-          soundRef={soundRef}
-          bpm={bpm}
-          freqArray={freqData}
-          offset={offset}
-        />
-      )}
-      {visType == "cylinder" && (
-        <CylinderVisualizer
           soundRef={soundRef}
           bpm={bpm}
           freqArray={freqData}
