@@ -8,6 +8,8 @@ import { Camera } from "~/components/babylon/Camera";
 import { Sound } from "@babylonjs/core";
 import TDC from "./TDC";
 import { useShowDebug } from "~/components/chipmod/providers/ShowDebugContext";
+import useEnhancedPostProcess from "./visualizers/useEnhancedPostProcess";
+import { ShaderConfig, shaders } from "./visualizers/ProceduralVisualizer";
 
 const useSceneReference = () => {
   return useRef<BabylonScene | null>(useScene());
@@ -145,7 +147,7 @@ export default function ChipModMain() {
         <Engine
           antialias
           adaptToDeviceRatio
-          canvasId="babylonJS"
+          canvasId="babylonJS-cm"
           className="absolute"
         >
           <Scene>
@@ -155,16 +157,87 @@ export default function ChipModMain() {
           </Scene>
         </Engine>
       </div>
-      <div className="h-screen overflow-hidden bg-gradient-to-br from-pink-100 via-green-200 to-red-200">
-        <Title className="z-10 mt-4 flex justify-center font-extralight text-emerald-600">
-          Sound demo
-        </Title>
-        <div className="mr-4 flex justify-end">
-          {/* <FileInput onChange={handleFileChange} /> */}
-          <PlaybackButton curState={playing} fnCallback={togglePlayback} />
-          <DebugButton curState={debugging} fnCallback={toggleDebugging} />
+      <div>
+        <div className="h-screen overflow-hidden bg-gradient-to-br from-pink-100 via-green-200 to-red-200">
+          <Title className="z-10 mt-4 flex justify-center font-extralight text-emerald-600">
+            Sound demo
+          </Title>
+          <div className="mr-4 flex justify-end">
+            {/* <FileInput onChange={handleFileChange} /> */}
+            <PlaybackButton curState={playing} fnCallback={togglePlayback} />
+            <DebugButton curState={debugging} fnCallback={toggleDebugging} />
+            <MenuDiv />
+          </div>
         </div>
       </div>
     </>
   );
 }
+
+const MenuDiv: React.FC = () => {
+  const {
+    postProcesses,
+    toggleShader,
+    activeShader,
+    shaderParams,
+    updateShaderParams,
+  } = useEnhancedPostProcess();
+
+  const [activeShaderConfig, setActiveShaderConfig] =
+    React.useState<ShaderConfig | null>(null);
+  const [activeShaderParameters, setActiveShaderParameters] = React.useState<
+    string[]
+  >([]);
+
+  // When `activeShader` changes, find the corresponding config and parameters.
+  useEffect(() => {
+    const foundShader = shaders.find((shader) => shader.name === activeShader);
+    console.log(foundShader);
+    if (foundShader) {
+      setActiveShaderConfig(foundShader);
+      setActiveShaderParameters(Object.keys(foundShader.parameters));
+    } else {
+      setActiveShaderConfig(null);
+      setActiveShaderParameters([]);
+    }
+  }, [activeShader]);
+
+  return (
+    <div className="pointer-events-none absolute flex h-full w-full flex-row items-end justify-end overflow-hidden p-10 ">
+      <div className="flex flex-col items-start overflow-hidden p-10 ">
+        {postProcesses.map((postProcess) => (
+          <button
+            className={`pointer-events-auto ${
+              postProcess.name === activeShader ? "text-red-500" : ""
+            }`}
+            key={postProcess.name}
+            onClick={() => toggleShader(postProcess.name)}
+          >
+            {postProcess.name}
+          </button>
+        ))}
+      </div>
+      <div className="flex flex-col items-start overflow-hidden p-10 ">
+        {activeShaderParameters.map((param) => (
+          <div key={param}>
+            <label>{param}</label>
+            <input
+              className="pointer-events-auto"
+              type="range"
+              min={0}
+              max={1000}
+              step={1}
+              value={shaderParams[param]}
+              onChange={(e) => {
+                const newValue = parseFloat(e.target.value);
+                if (shaderParams[param] !== newValue) {
+                  updateShaderParams(param, newValue);
+                }
+              }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};

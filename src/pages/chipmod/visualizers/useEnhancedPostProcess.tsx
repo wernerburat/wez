@@ -14,7 +14,7 @@ export const usePostProcess = () => {
 
   const [postProcesses, setPostProcesses] = useState<PostProcess[]>([]);
   useEffect(() => {
-    if (postProcesses.length > 0) return;
+    if (postProcesses.length > 0 || !scene?.getEngine()) return;
     setPostProcesses(
       shaders.map((shader) => {
         Effect.ShadersStore[shader.name + "VertexShader"] = shader.vertexShader;
@@ -29,7 +29,7 @@ export const usePostProcess = () => {
           1,
           camera.current,
           Texture.NEAREST_SAMPLINGMODE,
-          scene!.getEngine(),
+          scene.getEngine(),
           true,
         );
         return postProcess;
