@@ -3,7 +3,7 @@ import { type Sound } from "@babylonjs/core";
 import { Easings } from "~/components/chipmod/easings";
 
 type BeatEasingReturn = [number, () => void];
-export const useBeatEasing = (
+const useBeatEasing = (
   soundRef: MutableRefObject<Sound | null>,
   easingType = "linear",
   duration = 1000,
@@ -34,3 +34,5 @@ export const useBeatEasing = (
 
   return [easingValue, animateBeat];
 };
+
+export default useBeatEasing;
