@@ -12,7 +12,11 @@ function BabylonProvider({ children }: Props): React.ReactNode {
 
   return (
     <BabylonContext.Provider value={{ engine, scene, canvasRef }}>
-      <canvas ref={canvasRef} id="babylonJS" />
+      <canvas
+        ref={canvasRef}
+        id="babylonJS"
+        className="absolute h-full w-full"
+      />
       {children}
     </BabylonContext.Provider>
   );

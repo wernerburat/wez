@@ -8,28 +8,33 @@ import {
   MeshBuilder,
   Vector3,
 } from "@babylonjs/core";
+import { Camera } from "../babylon/Camera";
 
-const TestBabylonRender: React.FC = () => {
+const BabylonWrapper: React.FC = () => {
   const { scene, engine, canvasRef } = useBabylon();
 
   useEffect(() => {
     if (scene && engine && canvasRef) {
-      console.log(scene);
-      // init scene:
+      // Camera
       const camera = new FreeCamera("camera", new Vector3(0, 5, -10), scene);
       camera.setTarget(Vector3.Zero());
       camera.attachControl(canvasRef.current, true);
-      const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-      light.intensity = 0.7;
-      // init mesh:
-      const box = MeshBuilder.CreateBox("box", { size: 2 }, scene);
-      box.position.y = 1;
 
-      // init render loop:
+      // Light
+      new HemisphericLight("light", new Vector3(0, 1, 0), scene);
+
+      // Ground
+      MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+
+      // Render loop
       engine.runRenderLoop(() => {
         scene.render();
       });
-      
+
+      // Resize
+      window.addEventListener("resize", () => {
+        engine.resize();
+      });
     }
   }, [scene, engine, canvasRef]);
   return (
@@ -40,4 +45,4 @@ const TestBabylonRender: React.FC = () => {
   );
 };
 
-export default TestBabylonRender;
+export default BabylonWrapper;

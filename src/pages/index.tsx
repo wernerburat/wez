@@ -5,7 +5,7 @@ import { Title } from "~/components/Title";
 import MenuPage from "~/components/MenuPage";
 import BabylonProvider from "~/components/wezbabylon/BabylonProvider";
 import { Camera } from "~/components/babylon/Camera";
-import TestBabylonRender from "~/components/wezbabylon/TestBabylonRender";
+import BabylonWrapper from "~/components/wezbabylon/BabylonWrapper";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<ViewType>("moosik");
@@ -28,7 +28,7 @@ export default function Home() {
             <ChipModMain />
           </ShowDebugProvider> */}
           <BabylonProvider>
-            <TestBabylonRender />
+            <BabylonWrapper />
           </BabylonProvider>
         </>
       )}
