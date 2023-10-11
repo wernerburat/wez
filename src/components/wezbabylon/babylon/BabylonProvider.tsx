@@ -1,17 +1,15 @@
 import React from "react";
 import { BabylonContext } from "../context/BabylonContext";
 import { useBabylonEngine } from "../hook/useBabylonEngine";
-import useBabylonScene from "../hook/useBabylonScene";
 
 interface Props {
   children: React.ReactNode;
 }
 function BabylonProvider({ children }: Props): React.ReactNode {
-  const { canvasRef, engine } = useBabylonEngine();
-  const scene = useBabylonScene(engine);
+  const { canvasRef, engine, scene, loading } = useBabylonEngine();
 
   return (
-    <BabylonContext.Provider value={{ engine, scene, canvasRef }}>
+    <BabylonContext.Provider value={{ engine, scene, canvasRef, loading }}>
       <canvas
         ref={canvasRef}
         id="babylonJS"
