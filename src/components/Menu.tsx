@@ -21,11 +21,13 @@ const Menu: React.FC<MenuProps> = ({ setCurrentView }) => {
   const menuStyle = isMenuOpen
     ? {
         transform: "translateX(0%)",
-        transition: "transform 0.5s ease-in-out",
+        transition: "transform 0.5s ease-in-out, opacity 0.5s ease-in-out",
+        opacity: "1",
       }
     : {
         transform: "translateX(-100%)",
-        transition: "transform 0.3s ease-in-out",
+        transition: "transform 0.3s ease-in-out, opacity 0.3s ease-in-out",
+        opacity: "0",
       };
 
   return (
@@ -41,7 +43,7 @@ const Menu: React.FC<MenuProps> = ({ setCurrentView }) => {
       <div style={{ overflow: "hidden" }}>
         {/* Actual Menu */}
         <div
-          className="menu fixed inset-0 z-40 flex h-1/2 w-1/4  bg-slate-600 bg-opacity-70 p-4 pl-10"
+          className="menu fixed inset-0 z-40 flex bg-slate-600 bg-opacity-70 p-4 pl-10"
           style={{
             ...menuStyle,
           }}

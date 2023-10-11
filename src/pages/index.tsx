@@ -4,6 +4,8 @@ import ChipModMain from "~/pages/chipmod/chipmodmain";
 import Menu from "~/components/Menu";
 import { Title } from "~/components/Title";
 import MenuPage from "~/components/MenuPage";
+import { ShowDebugProvider } from "~/components/chipmod/providers/ShowDebugContext";
+import Yark from "./yark";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<ViewType>("moosik");
@@ -20,7 +22,14 @@ export default function Home() {
       )}
       <Menu setCurrentView={setCurrentView} />
       {currentView === "feed" && <PostsMain />}
-      {currentView === "moosik" && <ChipModMain />}
+      {currentView === "moosik" && (
+        <>
+          <ShowDebugProvider>
+            <ChipModMain />
+          </ShowDebugProvider>
+        </>
+      )}
+      {currentView === "yark" && <Yark />}
     </div>
   );
 }

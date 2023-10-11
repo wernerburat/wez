@@ -1,1 +1,1 @@
-type ViewType = "" | "feed" | "moosik";
+type ViewType = "" | "feed" | "moosik" | "yark";

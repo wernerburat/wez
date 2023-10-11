@@ -1,13 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Title } from "~/components/Title";
 
-import { Engine, Scene, useScene } from "react-babylonjs";
 import { Engine as EEngine } from "@babylonjs/core/Engines/engine";
-import { Analyser as EAnalyser } from "@babylonjs/core/Audio/analyser";
+import type { Scene as BabylonScene, WebGPUEngine } from "@babylonjs/core/";
+import {
+  Engine,
+  Scene,
+  useScene,
+  useBeforeRender,
+  useEngine,
+} from "react-babylonjs";
 import { Camera } from "~/components/babylon/Camera";
-import { Vector3, Sound } from "@babylonjs/core";
-import type { Scene as BabylonScene } from "@babylonjs/core/";
+import { Vector3, Sound, EngineFactory } from "@babylonjs/core";
+import { EngineCanvasContext } from "react-babylonjs";
 import TDC from "./TDC";
+import {
+  ShowDebugProvider,
+  useShowDebug,
+} from "~/components/chipmod/providers/ShowDebugContext";
 
 const useSceneReference = () => {
   return useRef<BabylonScene | null>(useScene());
@@ -16,12 +26,13 @@ const useSceneReference = () => {
 const useSound = (scene: BabylonScene | null) => {
   const soundRef = useRef<Sound | null>(null);
   const [isSoundReady, setSoundReady] = useState(false);
+
   useEffect(() => {
     if (!soundRef.current && scene) {
       console.log("Creating sound");
       soundRef.current = new Sound(
         "sound-1",
-        "music/test2.mp3",
+        "music/trance-lq.mp3",
         scene,
         () => {
           setSoundReady(true);
@@ -36,7 +47,6 @@ const useSound = (scene: BabylonScene | null) => {
     // Cleanup function
     return () => {
       soundRef.current?.dispose();
-      soundRef.current = null; // Reset the ref
     };
   }, [scene]);
 
@@ -59,7 +69,6 @@ const DefaultSound = (props: { playing: boolean }) => {
 
   return null; // Return null for components that don't render anything
 };
-
 export const useMainSound = (scene: BabylonScene | null) => {
   const soundRef = useRef<Sound | null>(null);
   useEffect(() => {
@@ -70,28 +79,30 @@ export const useMainSound = (scene: BabylonScene | null) => {
   return soundRef;
 };
 
-export const useAnalyser = (scene: BabylonScene | null) => {
-  const analyserRef = useRef<EAnalyser | null>(null); // Initialize with null
-  const byteTimeRef = useRef<Uint8Array | null>(null); // Initialize with null
-  const byteFrequencyRef = useRef<Uint8Array | null>(null); // Initialize with null
+export const useCurrentTime = () => {
+  const soundRef = useMainSound(useScene());
+  const timeRef = useRef<number>(0);
+  useBeforeRender(() => {
+    timeRef.current = soundRef.current!.currentTime;
+  });
+  return timeRef;
+};
 
-  useEffect(() => {
-    if (!analyserRef.current && scene) {
-      analyserRef.current = new EAnalyser(scene);
-      analyserRef.current.drawDebugCanvas();
-      EEngine.audioEngine?.connectToAnalyser(analyserRef.current);
-      byteTimeRef.current = analyserRef.current.getByteTimeDomainData();
-      byteFrequencyRef.current = analyserRef.current.getByteFrequencyData();
-    }
-  }, [scene]);
-  return { analyserRef, byteTimeRef, byteFrequencyRef };
+export const useDuration = () => {
+  const soundRef = useMainSound(useScene());
+  const durationRef = useRef<number>(0);
+  useBeforeRender(() => {
+    durationRef.current = soundRef.current!.getAudioBuffer()?.duration ?? 1;
+    // Return 1 to avoid division by 0.
+  });
+  return durationRef;
 };
 
 const useAudioPlayback = () => {
   const [playing, setPlaying] = useState(false);
 
   const togglePlayback = () => {
-    if (EEngine.audioEngine) {
+    if (EEngine.audioEngine && !EEngine.audioEngine.unlocked) {
       EEngine.audioEngine.useCustomUnlockedButton = true;
       EEngine.audioEngine.unlock();
     }
@@ -101,51 +112,67 @@ const useAudioPlayback = () => {
   return { playing, togglePlayback };
 };
 
-const PlaybackButton = ({
-  playing,
+const BaseButton = ({
+  children,
   onClick,
 }: {
-  playing: boolean;
-  onClick: () => void;
+  children: React.ReactNode;
+  onClick?: () => void;
 }) => (
   <button
-    className="z-10 m-auto rounded-full bg-gradient-to-br from-emerald-300 to-emerald-800 p-6"
+    className="z-10 mx-2 min-w-[180px] overflow-hidden whitespace-nowrap rounded-full bg-gradient-to-br from-emerald-300 to-emerald-800 p-5 text-center"
     onClick={onClick}
   >
-    <span className="font-mono font-semibold">
-      {playing ? "Pause" : "Play"}
-    </span>
+    <span className="font-mono font-semibold">{children}</span>
   </button>
 );
 
+type BaseButtonProps = {
+  curState: boolean;
+  fnCallback: () => void;
+};
+
+const PlaybackButton = ({ curState, fnCallback }: BaseButtonProps) => {
+  return (
+    <BaseButton onClick={fnCallback}>{curState ? "Pause" : "Play"}</BaseButton>
+  );
+};
+
+const DebugButton = ({ curState, fnCallback }: BaseButtonProps) => {
+  return (
+    <BaseButton onClick={fnCallback}>
+      {curState ? "Hide debug" : "Show debug"}
+    </BaseButton>
+  );
+};
+
 export default function ChipModMain() {
   const { playing, togglePlayback } = useAudioPlayback();
-
+  const { debugging, toggleDebugging } = useShowDebug();
   return (
     <>
       <div className="engine-stuff z-1 opacity-80">
-        <Engine canvasId="chipmod-canvas" className="absolute">
+        <Engine
+          antialias
+          adaptToDeviceRatio
+          canvasId="babylonJS"
+          className="absolute"
+        >
           <Scene>
             <Camera />
-            <hemisphericLight
-              name="light1"
-              intensity={0}
-              direction={new Vector3(-1, 0, 0)}
-            />
             <DefaultSound playing={playing} />
-            <TDC />
+            <TDC showDebug={debugging} />
           </Scene>
         </Engine>
       </div>
-      <div className="h-screen overflow-hidden bg-gradient-to-br from-pink-100 via-green-200 to-emerald-200">
-        <div className="html-stuff">
-          <Title className="z-10 flex justify-center font-extralight text-emerald-600">
-            Sound demo
-          </Title>
-          <div className="mt-4 flex h-full items-stretch justify-center">
-            {/* <FileInput onChange={handleFileChange} /> */}
-            <PlaybackButton playing={playing} onClick={togglePlayback} />
-          </div>
+      <div className="h-screen overflow-hidden bg-gradient-to-br from-pink-100 via-green-200 to-red-200">
+        <Title className="z-10 mt-4 flex justify-center font-extralight text-emerald-600">
+          Sound demo
+        </Title>
+        <div className="mr-4 flex justify-end">
+          {/* <FileInput onChange={handleFileChange} /> */}
+          <PlaybackButton curState={playing} fnCallback={togglePlayback} />
+          <DebugButton curState={debugging} fnCallback={toggleDebugging} />
         </div>
       </div>
     </>
