@@ -1,20 +1,28 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useBabylon } from "./context/BabylonContext";
-import useMeshBuilder from "./hook/useMeshBuilder";
 import { DynamicTexture, StandardMaterial, type Mesh } from "@babylonjs/core";
+import { useBabylon } from "./context/BabylonContext";
+import { type TextEntry } from "./type/TextTypes";
+import useMeshBuilder from "./hook/useMeshBuilder";
+import useMaterialCache from "./hook/useMaterialCache";
 
-type TextEntry = {
-  id: number;
-  char: string;
-};
-
-type BabylonBox = Mesh; // Replace with a specific BabylonJS type if available
+type BabylonBox = Mesh;
 
 const TextBox: React.FC = () => {
   const { scene, loading } = useBabylon();
   const [textEntries, setTextEntries] = useState<TextEntry[]>([]);
   const { createBox } = useMeshBuilder();
   const boxesMapRef = useRef(new Map<number, BabylonBox>());
+  const { getMaterialForText } = useMaterialCache();
+
+  // Material cache
+  const sharedMaterialRef = useRef<StandardMaterial | null>(null);
+  if (!sharedMaterialRef.current && scene) {
+    sharedMaterialRef.current = new StandardMaterial("SharedMat", scene);
+  }
+  const materialCacheRef = useRef(new Map<string, StandardMaterial>());
+
+  // Texture cache
+  const textureCacheRef = useRef(new Map<string, DynamicTexture>());
 
   const textChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newText = e.target.value;
@@ -31,20 +39,39 @@ const TextBox: React.FC = () => {
   const addTextToBox = useCallback(
     (box: BabylonBox, text: string) => {
       if (scene) {
-        const texture = new DynamicTexture("dynamic texture", 512, scene, true);
-        texture.drawText(
-          text,
-          null,
-          400,
-          "bold 72px Arial",
-          "white",
-          "transparent",
-          true,
-          true,
-        );
-        const material = new StandardMaterial("Mat", scene);
-        material.diffuseTexture = texture;
-        box.material = material;
+        let material;
+
+        // Check if material for this character exists in the cache
+        if (materialCacheRef.current.has(text)) {
+          material = materialCacheRef.current.get(text);
+        } else {
+          // If not, create it and store in cache
+          const texture = new DynamicTexture(
+            `texture-${text}`,
+            512,
+            scene,
+            true,
+          );
+          texture.drawText(
+            text,
+            null,
+            400,
+            "bold 72px Arial",
+            "white",
+            "transparent",
+            true,
+            true,
+          );
+
+          material = new StandardMaterial(`material-${text}`, scene);
+          material.diffuseTexture = texture;
+
+          materialCacheRef.current.set(text, material);
+          textureCacheRef.current.set(text, texture); // Store the texture in its cache as well if you might need it later
+        }
+
+        // Assign the material to the box
+        if (material) box.material = material;
       }
     },
     [scene],

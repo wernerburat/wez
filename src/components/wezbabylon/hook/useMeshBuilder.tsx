@@ -1,69 +1,74 @@
 import { MeshBuilder } from "@babylonjs/core";
 import { useBabylon } from "../context/BabylonContext";
-
-type CreateBoxOptions = Parameters<typeof MeshBuilder.CreateBox>[1];
-type CreateSphereOptions = Parameters<typeof MeshBuilder.CreateSphere>[1];
-type CreateCylinderOptions = Parameters<typeof MeshBuilder.CreateCylinder>[1];
-type CreatePlaneOptions = Parameters<typeof MeshBuilder.CreatePlane>[1];
-type CreateGroundOptions = Parameters<typeof MeshBuilder.CreateGround>[1];
-type CreateTorusOptions = Parameters<typeof MeshBuilder.CreateTorus>[1];
-type CreateIcoSphereOptions = Parameters<typeof MeshBuilder.CreateIcoSphere>[1];
-type CreateTiledBoxOptions = Parameters<typeof MeshBuilder.CreateTiledBox>[1];
-type CreateTiledPlaneOptions = Parameters<
-  typeof MeshBuilder.CreateTiledPlane
->[1];
-type CreateTiledGroundOptions = Parameters<
-  typeof MeshBuilder.CreateTiledGround
->[1];
-type CreateTubeOptions = Parameters<typeof MeshBuilder.CreateTube>[1];
-type CreatePolyhedronOptions = Parameters<
-  typeof MeshBuilder.CreatePolyhedron
->[1];
-type CreateGeodesicOptions = Parameters<typeof MeshBuilder.CreateGeodesic>[1];
-type CreateGoldbergOptions = Parameters<typeof MeshBuilder.CreateGoldberg>[1];
-type CreateCapsuleOptions = Parameters<typeof MeshBuilder.CreateCapsule>[1];
-type CreateDiscOptions = Parameters<typeof MeshBuilder.CreateDisc>[1];
-type CreateRibbonOptions = Parameters<typeof MeshBuilder.CreateRibbon>[1];
+import type * as MeshOptions from "../type/MeshOptionsTypes";
 
 const useMeshBuilder = () => {
   const { scene } = useBabylon();
 
-  const createBox = (name: string, options?: CreateBoxOptions) =>
+  const createBox = (name: string, options?: MeshOptions.CreateBoxOptions) =>
     MeshBuilder.CreateBox(name, options, scene);
-  const createSphere = (name: string, options?: CreateSphereOptions) =>
-    MeshBuilder.CreateSphere(name, options, scene);
-  const createCylinder = (name: string, options?: CreateCylinderOptions) =>
-    MeshBuilder.CreateCylinder(name, options, scene);
-  const createPlane = (name: string, options?: CreatePlaneOptions) =>
-    MeshBuilder.CreatePlane(name, options, scene);
-  const createGround = (name: string, options?: CreateGroundOptions) =>
-    MeshBuilder.CreateGround(name, options);
-  const createTorus = (name: string, options?: CreateTorusOptions) =>
-    MeshBuilder.CreateTorus(name, options);
-  const createIcoSphere = (name: string, options?: CreateIcoSphereOptions) =>
-    MeshBuilder.CreateIcoSphere(name, options, scene);
-  const createTiledBox = (name: string, options: CreateTiledBoxOptions) =>
-    MeshBuilder.CreateTiledBox(name, options, scene);
-  const createTiledPlane = (name: string, options: CreateTiledPlaneOptions) =>
-    MeshBuilder.CreateTiledPlane(name, options, scene);
-  const createTiledGround = (name: string, options: CreateTiledGroundOptions) =>
-    MeshBuilder.CreateTiledGround(name, options, scene);
-  const createTube = (name: string, options: CreateTubeOptions) =>
+  const createSphere = (
+    name: string,
+    options?: MeshOptions.CreateSphereOptions,
+  ) => MeshBuilder.CreateSphere(name, options, scene);
+  const createCylinder = (
+    name: string,
+    options?: MeshOptions.CreateCylinderOptions,
+  ) => MeshBuilder.CreateCylinder(name, options, scene);
+  const createPlane = (
+    name: string,
+    options?: MeshOptions.CreatePlaneOptions,
+  ) => MeshBuilder.CreatePlane(name, options, scene);
+  const createGround = (
+    name: string,
+    options?: MeshOptions.CreateGroundOptions,
+  ) => MeshBuilder.CreateGround(name, options);
+  const createTorus = (
+    name: string,
+    options?: MeshOptions.CreateTorusOptions,
+  ) => MeshBuilder.CreateTorus(name, options);
+  const createIcoSphere = (
+    name: string,
+    options?: MeshOptions.CreateIcoSphereOptions,
+  ) => MeshBuilder.CreateIcoSphere(name, options, scene);
+  const createTiledBox = (
+    name: string,
+    options: MeshOptions.CreateTiledBoxOptions,
+  ) => MeshBuilder.CreateTiledBox(name, options, scene);
+  const createTiledPlane = (
+    name: string,
+    options: MeshOptions.CreateTiledPlaneOptions,
+  ) => MeshBuilder.CreateTiledPlane(name, options, scene);
+  const createTiledGround = (
+    name: string,
+    options: MeshOptions.CreateTiledGroundOptions,
+  ) => MeshBuilder.CreateTiledGround(name, options, scene);
+  const createTube = (name: string, options: MeshOptions.CreateTubeOptions) =>
     MeshBuilder.CreateTube(name, options, scene);
-  const createPolyhedron = (name: string, options: CreatePolyhedronOptions) =>
-    MeshBuilder.CreatePolyhedron(name, options, scene);
-  const createGeodesic = (name: string, options: CreateGeodesicOptions) =>
-    MeshBuilder.CreateGeodesic(name, options, scene);
-  const createGoldberg = (name: string, options: CreateGoldbergOptions) =>
-    MeshBuilder.CreateGoldberg(name, options, scene);
-  const createCapsule = (name: string, options: CreateCapsuleOptions) =>
-    MeshBuilder.CreateCapsule(name, options, scene);
-  const createDisc = (name: string, options: CreateDiscOptions) =>
+  const createPolyhedron = (
+    name: string,
+    options: MeshOptions.CreatePolyhedronOptions,
+  ) => MeshBuilder.CreatePolyhedron(name, options, scene);
+  const createGeodesic = (
+    name: string,
+    options: MeshOptions.CreateGeodesicOptions,
+  ) => MeshBuilder.CreateGeodesic(name, options, scene);
+  const createGoldberg = (
+    name: string,
+    options: MeshOptions.CreateGoldbergOptions,
+  ) => MeshBuilder.CreateGoldberg(name, options, scene);
+  const createCapsule = (
+    name: string,
+    options: MeshOptions.CreateCapsuleOptions,
+  ) => MeshBuilder.CreateCapsule(name, options, scene);
+  const createDisc = (name: string, options: MeshOptions.CreateDiscOptions) =>
     MeshBuilder.CreateDisc(name, options, scene);
-  const createRibbon = (name: string, options: CreateRibbonOptions) =>
-    MeshBuilder.CreateRibbon(name, options, scene);
+  const createRibbon = (
+    name: string,
+    options: MeshOptions.CreateRibbonOptions,
+  ) => MeshBuilder.CreateRibbon(name, options, scene);
 
-  // TODO: CreateText in its own hook
+  // TODO: MeshOptions.CreateText in its own hook
 
   return {
     createBox,
