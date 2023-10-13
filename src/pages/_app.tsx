@@ -7,17 +7,17 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "react-hot-toast";
 
 import { MenuProvider } from "~/contexts/MenuContext";
-import { DndContext } from "@dnd-kit/core";
+import { DragDropProvider } from "~/components/wezbabylon/context/DragDropContext";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <ClerkProvider {...pageProps}>
-      <DndContext>
+      <DragDropProvider>
         <Toaster position="bottom-center" />
         <MenuProvider>
           <Component {...pageProps} />
         </MenuProvider>
-      </DndContext>
+      </DragDropProvider>
     </ClerkProvider>
   );
 };

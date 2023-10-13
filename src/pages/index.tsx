@@ -5,6 +5,10 @@ import { Title } from "~/components/Title";
 import MenuPage from "~/components/MenuPage";
 import BabylonProvider from "~/components/wezbabylon/babylon/BabylonProvider";
 import BabylonWrapper from "~/components/wezbabylon/babylon/BabylonWrapper";
+import Overlay from "~/components/wezbabylon/components/Overlay";
+import DroppableZoneWrapper from "~/components/wezbabylon/components/DroppableZoneWrapper";
+import PostProcessManagerZones from "~/components/wezbabylon/components/PostProcessManagerZones";
+import { PostProcessProvider } from "~/components/wezbabylon/context/PostProcessContext";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<ViewType>("moosik");
@@ -24,7 +28,14 @@ export default function Home() {
       {currentView === "moosik" && (
         <>
           <BabylonProvider>
-            <BabylonWrapper />
+            <PostProcessProvider>
+              <BabylonWrapper />
+              <Overlay>
+                <DroppableZoneWrapper layout={"quadrant"}>
+                  <PostProcessManagerZones />
+                </DroppableZoneWrapper>
+              </Overlay>
+            </PostProcessProvider>
           </BabylonProvider>
         </>
       )}
