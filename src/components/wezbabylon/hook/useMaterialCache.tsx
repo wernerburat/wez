@@ -1,9 +1,9 @@
 import { useCallback, useRef } from "react";
-import { useBabylonEngine } from "./useBabylonEngine";
 import { DynamicTexture, StandardMaterial } from "@babylonjs/core";
+import { useBabylon } from "../context/BabylonContext";
 
 function useMaterialCache() {
-  const { scene } = useBabylonEngine();
+  const { scene } = useBabylon();
 
   const materialCacheRef = useRef(new Map<string, StandardMaterial>());
   const textureCacheRef = useRef(new Map<string, DynamicTexture>());

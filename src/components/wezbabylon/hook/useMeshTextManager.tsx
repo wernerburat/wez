@@ -3,28 +3,28 @@ import { type StandardMaterial } from "@babylonjs/core";
 import { type CreateBoxOptions } from "../type/MeshOptionsTypes";
 import { type BabylonBox } from "../type/MeshTypes";
 import { type TextEntry } from "../type/TextTypes";
-import { useBabylonEngine } from "./useBabylonEngine";
+import { useBabylon } from "../context/BabylonContext";
 
 type MeshCreator = (name: string, options?: CreateBoxOptions) => BabylonBox;
 
-function useMeshManager(
+function useMeshTextManager(
   getMaterialForText: (text: string) => StandardMaterial | undefined,
   createMesh: MeshCreator,
 ) {
   const meshesMapRef = useRef(new Map<number, BabylonBox>());
-  const { scene } = useBabylonEngine();
+  const { scene } = useBabylon();
 
-  const updateMeshes = useCallback(
+  const disposeUnusedMeshes = useCallback((textEntries: TextEntry[]) => {
+    meshesMapRef.current.forEach((mesh, id) => {
+      if (!textEntries.find((entry) => entry.id === id)) {
+        mesh.dispose();
+        meshesMapRef.current.delete(id);
+      }
+    });
+  }, []);
+
+  const createOrUpdateMeshes = useCallback(
     (textEntries: TextEntry[]) => {
-      if (!scene) return;
-
-      meshesMapRef.current.forEach((mesh, id) => {
-        if (!textEntries.find((entry) => entry.id === id)) {
-          mesh.dispose();
-          meshesMapRef.current.delete(id);
-        }
-      });
-
       textEntries.forEach((entry, index) => {
         if (!meshesMapRef.current.has(entry.id)) {
           const mesh = createMesh(`mesh-${entry.id}`);
@@ -37,10 +37,20 @@ function useMeshManager(
         if (material) mesh.material = material;
       });
     },
-    [scene, createMesh, getMaterialForText],
+    [createMesh, getMaterialForText],
   );
 
-  return { updateMeshes };
+  const synchronizeMeshesWithText = useCallback(
+    (textEntries: TextEntry[]) => {
+      if (!scene) return;
+
+      disposeUnusedMeshes(textEntries);
+      createOrUpdateMeshes(textEntries);
+    },
+    [scene, disposeUnusedMeshes, createOrUpdateMeshes],
+  );
+
+  return { synchronizeMeshesWithText };
 }
 
-export default useMeshManager;
+export default useMeshTextManager;

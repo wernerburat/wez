@@ -7,7 +7,11 @@ import {
 import { useState, useEffect, useRef } from "react";
 
 let hasInitialized = false;
-export const useBabylonEngine = () => {
+
+/* Don't call directly!
+ * Use useBabylon instead.
+ */
+export const useBabylonEngineInitialization = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [engine, setEngine] = useState<Engine | WebGPUEngine | null>(null);
   const [scene, setScene] = useState<Scene | null>(null);
