@@ -1,5 +1,4 @@
 import { createContext, useContext, type ReactNode, useState } from "react";
-import { useBabylon } from "./BabylonContext";
 
 interface PostProcess {
   id: string;
@@ -23,7 +22,6 @@ export const PostProcessProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [postProcesses, setPostProcesses] = useState<PostProcess[]>([]);
-  const { scene } = useBabylon();
 
   const addPostProcess = (postProcess: PostProcess) => {
     setPostProcesses((prev) => [...prev, postProcess]);

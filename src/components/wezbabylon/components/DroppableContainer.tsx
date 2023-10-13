@@ -10,7 +10,7 @@ const DroppableContainer: React.FC<DroppableProps> = ({ id, content }) => {
     id: id,
   });
   const style = {
-    border: isOver ? "" : "none", // Adjust the border color/style as per your requirement
+    border: isOver ? "" : "none",
   };
 
   return (

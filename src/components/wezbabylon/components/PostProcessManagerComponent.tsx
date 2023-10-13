@@ -25,6 +25,7 @@ const PostProcessManagerComponent = ({
       {...listeners}
       {...attributes}
       className="pointer-events-auto rounded-md bg-gray-800 p-4 font-extralight opacity-70"
+      aria-describedby=""
     >
       <h3 className="mb-4 opacity-100">Post Process Manager</h3>
 
