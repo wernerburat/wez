@@ -8,7 +8,7 @@ const DroppableZoneWrapper = ({
   children,
   layout,
 }: DroppableZoneProps): React.ReactNode => {
-  let containerClasses = "flex justify-center pointer-events-none";
+  let containerClasses = "flex justify-center";
 
   switch (layout) {
     case "horizontal":

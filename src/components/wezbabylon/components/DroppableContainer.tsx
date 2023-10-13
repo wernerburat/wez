@@ -17,7 +17,7 @@ const DroppableContainer: React.FC<DroppableProps> = ({ id, content }) => {
     <div
       ref={setNodeRef}
       style={style}
-      className="m-4 border-2 border-dashed border-gray-400 p-4"
+      className="m-4 border-2 border-dashed border-gray-400 p-4 "
     >
       {content}
     </div>

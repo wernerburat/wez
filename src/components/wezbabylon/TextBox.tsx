@@ -28,7 +28,7 @@ const TextBox: React.FC = () => {
     <div className="pointer-events-none absolute flex h-full w-full flex-row overflow-hidden">
       <div className="flex w-full items-end justify-end overflow-hidden">
         <input
-          className="pointer-events-auto flex w-full justify-end bg-slate-700 p-2 font-mono text-lg font-bold text-slate-200 outline-none"
+          className="pointer-events-auto z-20 flex w-full justify-end bg-slate-700 p-2 font-mono text-lg font-bold text-slate-200 outline-none"
           onChange={textChange}
         ></input>
       </div>
