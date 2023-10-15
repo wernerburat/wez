@@ -1,11 +1,10 @@
 import {
-  ArcRotateCamera,
+  Animation,
   CubicEase,
   EasingFunction,
-  Vector3,
-  Animation,
-  Mesh,
-  AbstractMesh,
+  type AbstractMesh,
+  type ArcRotateCamera,
+  type Vector3,
 } from "@babylonjs/core";
 
 function createAnimation({

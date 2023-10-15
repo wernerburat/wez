@@ -1,26 +1,23 @@
 import React, { useEffect } from "react";
 import { useBabylon } from "../context/BabylonContext";
 import { ArcRotateCamera, HemisphericLight, Vector3 } from "@babylonjs/core";
-import useMeshBuilder from "../hook/useMeshBuilder";
-import TextBox from "../TextBox";
+import RacerScene from "../racer/RacerScene";
 
 const BabylonWrapper: React.FC = () => {
   const { scene, engine, canvasRef, loading } = useBabylon();
-  const { createBox } = useMeshBuilder();
 
   useEffect(() => {
     if (scene && engine && canvasRef && !loading) {
-      // Camera
-      const camera = new ArcRotateCamera(
-        "camera",
-        -Math.PI / 2,
-        Math.PI / 2,
-        10,
-        Vector3.Zero(),
-        scene,
-      );
-      camera.setTarget(Vector3.Zero());
-      camera.attachControl(canvasRef.current, true);
+      // // Camera
+      // const camera = new ArcRotateCamera(
+      //   "camera",
+      //   -Math.PI / 2,
+      //   Math.PI / 2,
+      //   10,
+      //   Vector3.Zero(),
+      //   scene,
+      // );
+      // camera.setTarget(Vector3.Zero());
 
       // Light
       new HemisphericLight("light", new Vector3(0, 1, 0), scene);
@@ -41,11 +38,11 @@ const BabylonWrapper: React.FC = () => {
         engine?.resize();
       });
     };
-  }, [scene, engine, canvasRef, loading, createBox]);
+  }, [scene, engine, canvasRef, loading]);
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <div className="pointer-events-none absolute flex w-full justify-center"></div>
-      <TextBox />
+      <RacerScene />
     </div>
   );
 };
