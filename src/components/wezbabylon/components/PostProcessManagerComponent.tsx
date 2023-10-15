@@ -27,10 +27,10 @@ const PostProcessManagerComponent = ({
       ref={setNodeRef}
       style={style}
       {...attributes}
-      className="cursor-default rounded-md bg-gray-800 p-4 font-extralight opacity-70"
+      className="pointer-events-auto cursor-default rounded-md bg-gray-800 p-4 font-extralight opacity-70"
       aria-describedby=""
     >
-      <h3 {...listeners} className="mb-4 opacity-100">
+      <h3 {...listeners} className="mb-2 cursor-pointer rounded-md border px-3">
         Post Process Manager
       </h3>
       {children}

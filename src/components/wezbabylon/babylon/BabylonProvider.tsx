@@ -14,7 +14,7 @@ function BabylonProvider({ children }: Props): React.ReactNode {
       <canvas
         ref={canvasRef}
         id="babylonJS"
-        className="absolute h-full w-full"
+        className="pointer-events-auto absolute h-full w-full"
       />
       {children}
     </BabylonContext.Provider>
