@@ -3,7 +3,12 @@ import {
   EngineFactory,
   type WebGPUEngine,
   Scene,
+  HemisphericLight,
+  Vector3,
+  FollowCamera,
+  HavokPlugin,
 } from "@babylonjs/core";
+import HavokPhysics from "@babylonjs/havok";
 import { useState, useEffect, useRef } from "react";
 
 let hasInitialized = false;
@@ -24,13 +29,40 @@ export const useBabylonEngineInitialization = () => {
       try {
         const createdEngine = await EngineFactory.CreateAsync(canvas, {});
         const newScene = new Scene(createdEngine);
+        // Physics:
+        const havokInstance = await HavokPhysics();
+        const hk = new HavokPlugin(true, havokInstance);
+        newScene.enablePhysics(new Vector3(0, -9.81, 0), hk);
+
         setEngine(createdEngine);
         setScene(newScene);
         hasInitialized = true;
+
+        runRenderLoop(createdEngine, newScene);
+
+        return () => {
+          window.removeEventListener("resize", () => {
+            createdEngine?.resize();
+          });
+        };
       } catch (error) {
         console.error("Error while creating the engine.", error);
-      } finally {
-        setLoading(false);
+      }
+
+      function runRenderLoop(createdEngine: Engine, newScene: Scene) {
+        if (createdEngine && newScene) {
+          new HemisphericLight("light", new Vector3(0, 1, 0), newScene);
+          new FollowCamera("FollowCam", new Vector3(0, 10, -10), newScene);
+          createdEngine.runRenderLoop(() => {
+            newScene.render();
+          });
+
+          window.addEventListener("resize", () => {
+            createdEngine.resize();
+          });
+
+          setLoading(false);
+        }
       }
     };
 
